@@ -1,6 +1,9 @@
 namespace SpriteKind {
     export const Door = SpriteKind.create()
 }
+/**
+ * Going from one room to another
+ */
 // enter other bedroom
 scene.onOverlapTile(SpriteKind.Player, myTiles.tile2, function (sprite, location) {
     if (sprite.top < 16) {
@@ -44,6 +47,18 @@ scene.onOverlapTile(SpriteKind.Player, myTiles.tile2, function (sprite, location
             `, [myTiles.transparency16,myTiles.tile1,myTiles.tile4,myTiles.tile6], TileScale.Sixteen)))
         sprite.left = 32
     }
+})
+/**
+ * Level 1 : unlocking doors
+ */
+scene.onHitWall(SpriteKind.Player, function (sprite, location) {
+    if (tiles.tileIs(location, myTiles.tile2) || tiles.tileIs(location, myTiles.tile5)) {
+        game.showLongText("The door is locked!", DialogLayout.Bottom)
+        game.showLongText("Use code to open it!", DialogLayout.Bottom)
+    }
+})
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    unlockDoor()
 })
 // enter my bedroom
 scene.onOverlapTile(SpriteKind.Player, myTiles.tile4, function (sprite, location) {
@@ -89,6 +104,18 @@ scene.onOverlapTile(SpriteKind.Player, myTiles.tile4, function (sprite, location
         sprite.right = 220
     }
 })
+// Funky behavior - must be touching D1, walls at D1 and D3 disappear at same time
+function unlockDoor () {
+    if (mySprite.tileKindAt(TileDirection.Right, myTiles.tile2)) {
+        tiles.setWallAt(tiles.getTileLocation(15, 7), false)
+        tiles.setWallAt(tiles.getTileLocation(15, 8), false)
+    } else if (mySprite.tileKindAt(TileDirection.Bottom, myTiles.tile5)) {
+        tiles.setWallAt(tiles.getTileLocation(7, 15), false)
+        tiles.setWallAt(tiles.getTileLocation(8, 15), false)
+    } else {
+        game.showLongText("Get closer to the door to unlock it.", DialogLayout.Bottom)
+    }
+}
 // enter hallway
 scene.onOverlapTile(SpriteKind.Player, myTiles.tile6, function (sprite, location) {
     if (sprite.bottom > 220) {
@@ -177,7 +204,8 @@ scene.onOverlapTile(SpriteKind.Player, myTiles.tile5, function (sprite, location
         sprite.right = 220
     }
 })
-let mySprite = sprites.create(img`
+let mySprite: Sprite = null
+mySprite = sprites.create(img`
     9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 
     9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 
     9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 
@@ -197,7 +225,7 @@ let mySprite = sprites.create(img`
     `, SpriteKind.Player)
 controller.moveSprite(mySprite)
 scene.cameraFollowSprite(mySprite)
-tiles.setTilemap(tiles.createTilemap(hex`1000100001010101010101010101010101010101010000000000000000000000000000010100000000000000000000000000000101000000000000000000000000000001010000000000000000000000000000010100000000000000000000000000000101000000000000000000000000000001010000000000000000000000000000020100000000000000000000000000000201000000000000000000000000000001010000000000000000000000000000010100000000000000000000000000000101000000000000000000000000000001010000000000000000000000000000010100000000000000000000000000000101010101010101050501010101010101`, img`
+tiles.loadMap(tiles.createMap(tiles.createTilemap(hex`1000100001010101010101010101010101010101010000000000000000000000000000010100000000000000000000000000000101000000000000000000000000000001010000000000000000000000000000010100000000000000000000000000000101000000000000000000000000000001010000000000000000000000000000020100000000000000000000000000000201000000000000000000000000000001010000000000000000000000000000010100000000000000000000000000000101000000000000000000000000000001010000000000000000000000000000010100000000000000000000000000000101010101010101030301010101010101`, img`
     2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
     2 . . . . . . . . . . . . . . 2 
     2 . . . . . . . . . . . . . . 2 
@@ -205,13 +233,13 @@ tiles.setTilemap(tiles.createTilemap(hex`100010000101010101010101010101010101010
     2 . . . . . . . . . . . . . . 2 
     2 . . . . . . . . . . . . . . 2 
     2 . . . . . . . . . . . . . . 2 
-    2 . . . . . . . . . . . . . . . 
-    2 . . . . . . . . . . . . . . . 
     2 . . . . . . . . . . . . . . 2 
     2 . . . . . . . . . . . . . . 2 
     2 . . . . . . . . . . . . . . 2 
     2 . . . . . . . . . . . . . . 2 
     2 . . . . . . . . . . . . . . 2 
     2 . . . . . . . . . . . . . . 2 
-    2 2 2 2 2 2 2 . . 2 2 2 2 2 2 2 
-    `, [myTiles.transparency16,myTiles.tile1,myTiles.tile2,myTiles.tile3,myTiles.tile4,myTiles.tile5,myTiles.tile6], TileScale.Sixteen))
+    2 . . . . . . . . . . . . . . 2 
+    2 . . . . . . . . . . . . . . 2 
+    2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+    `, [myTiles.transparency16,myTiles.tile1,myTiles.tile2,myTiles.tile5], TileScale.Sixteen)))
