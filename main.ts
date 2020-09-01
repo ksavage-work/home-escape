@@ -4,6 +4,9 @@ namespace SpriteKind {
 /**
  * Going from one room to another
  */
+/**
+ * Level 1 : unlocking doors
+ */
 // enter other bedroom
 scene.onOverlapTile(SpriteKind.Player, myTiles.tile2, function (sprite, location) {
     if (sprite.top < 16) {
@@ -48,9 +51,6 @@ scene.onOverlapTile(SpriteKind.Player, myTiles.tile2, function (sprite, location
         sprite.left = 32
     }
 })
-/**
- * Level 1 : unlocking doors
- */
 scene.onHitWall(SpriteKind.Player, function (sprite, location) {
     if (tiles.tileIs(location, myTiles.tile2) || tiles.tileIs(location, myTiles.tile5)) {
         game.showLongText("The door is locked!", DialogLayout.Bottom)
@@ -58,8 +58,17 @@ scene.onHitWall(SpriteKind.Player, function (sprite, location) {
     }
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    unlockDoor()
+    unlockRedDoor()
 })
+// Funky behavior - must be touching D1, walls at D1 and D3 disappear at same time
+function unlockRedDoor () {
+    if (mySprite.tileKindAt(TileDirection.Right, myTiles.tile2)) {
+        tiles.setWallAt(tiles.getTileLocation(15, 7), false)
+        tiles.setWallAt(tiles.getTileLocation(15, 8), false)
+    } else {
+        game.showLongText("Get closer to the red door to unlock it.", DialogLayout.Bottom)
+    }
+}
 // enter my bedroom
 scene.onOverlapTile(SpriteKind.Player, myTiles.tile4, function (sprite, location) {
     if (sprite.top < 16) {
@@ -104,18 +113,6 @@ scene.onOverlapTile(SpriteKind.Player, myTiles.tile4, function (sprite, location
         sprite.right = 220
     }
 })
-// Funky behavior - must be touching D1, walls at D1 and D3 disappear at same time
-function unlockDoor () {
-    if (mySprite.tileKindAt(TileDirection.Right, myTiles.tile2)) {
-        tiles.setWallAt(tiles.getTileLocation(15, 7), false)
-        tiles.setWallAt(tiles.getTileLocation(15, 8), false)
-    } else if (mySprite.tileKindAt(TileDirection.Bottom, myTiles.tile5)) {
-        tiles.setWallAt(tiles.getTileLocation(7, 15), false)
-        tiles.setWallAt(tiles.getTileLocation(8, 15), false)
-    } else {
-        game.showLongText("Get closer to the door to unlock it.", DialogLayout.Bottom)
-    }
-}
 // enter hallway
 scene.onOverlapTile(SpriteKind.Player, myTiles.tile6, function (sprite, location) {
     if (sprite.bottom > 220) {
@@ -160,6 +157,18 @@ scene.onOverlapTile(SpriteKind.Player, myTiles.tile6, function (sprite, location
         sprite.left = 32
     }
 })
+controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
+    unlockBlueDoor()
+})
+// Funky behavior - must be touching D1, walls at D1 and D3 disappear at same time
+function unlockBlueDoor () {
+    if (mySprite.tileKindAt(TileDirection.Bottom, myTiles.tile5)) {
+        tiles.setWallAt(tiles.getTileLocation(7, 15), false)
+        tiles.setWallAt(tiles.getTileLocation(8, 15), false)
+    } else {
+        game.showLongText("Get closer to the blue door to unlock it.", DialogLayout.Bottom)
+    }
+}
 // enter bathroom
 scene.onOverlapTile(SpriteKind.Player, myTiles.tile5, function (sprite, location) {
     if (sprite.bottom > 220) {
