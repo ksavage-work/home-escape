@@ -2,9 +2,6 @@ namespace SpriteKind {
     export const Door = SpriteKind.create()
 }
 /**
- * Going from one room to another
- */
-/**
  * Level 1 : unlocking doors
  */
 // enter other bedroom
@@ -60,7 +57,6 @@ scene.onHitWall(SpriteKind.Player, function (sprite, location) {
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     unlockRedDoor()
 })
-// Funky behavior - must be touching D1, walls at D1 and D3 disappear at same time
 function unlockRedDoor () {
     if (mySprite.tileKindAt(TileDirection.Right, myTiles.tile2)) {
         tiles.setWallAt(tiles.getTileLocation(15, 7), false)
@@ -69,6 +65,9 @@ function unlockRedDoor () {
         game.showLongText("Get closer to the red door to unlock it.", DialogLayout.Bottom)
     }
 }
+/**
+ * Going from one room to another
+ */
 // enter my bedroom
 scene.onOverlapTile(SpriteKind.Player, myTiles.tile4, function (sprite, location) {
     if (sprite.top < 16) {
@@ -80,15 +79,15 @@ scene.onOverlapTile(SpriteKind.Player, myTiles.tile4, function (sprite, location
             2 . . . . . . . . . . . . . . 2 
             2 . . . . . . . . . . . . . . 2 
             2 . . . . . . . . . . . . . . 2 
-            2 . . . . . . . . . . . . . . . 
-            2 . . . . . . . . . . . . . . . 
             2 . . . . . . . . . . . . . . 2 
             2 . . . . . . . . . . . . . . 2 
             2 . . . . . . . . . . . . . . 2 
             2 . . . . . . . . . . . . . . 2 
             2 . . . . . . . . . . . . . . 2 
             2 . . . . . . . . . . . . . . 2 
-            2 2 2 2 2 2 2 . . 2 2 2 2 2 2 2 
+            2 . . . . . . . . . . . . . . 2 
+            2 . . . . . . . . . . . . . . 2 
+            2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
             `, [myTiles.transparency16,myTiles.tile1,myTiles.tile2,myTiles.tile5], TileScale.Sixteen)))
         sprite.bottom = 220
     } else if (sprite.left < 16) {
@@ -100,15 +99,15 @@ scene.onOverlapTile(SpriteKind.Player, myTiles.tile4, function (sprite, location
             2 . . . . . . . . . . . . . . 2 
             2 . . . . . . . . . . . . . . 2 
             2 . . . . . . . . . . . . . . 2 
-            2 . . . . . . . . . . . . . . . 
-            2 . . . . . . . . . . . . . . . 
             2 . . . . . . . . . . . . . . 2 
             2 . . . . . . . . . . . . . . 2 
             2 . . . . . . . . . . . . . . 2 
             2 . . . . . . . . . . . . . . 2 
             2 . . . . . . . . . . . . . . 2 
             2 . . . . . . . . . . . . . . 2 
-            2 2 2 2 2 2 2 . . 2 2 2 2 2 2 2 
+            2 . . . . . . . . . . . . . . 2 
+            2 . . . . . . . . . . . . . . 2 
+            2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
             `, [myTiles.transparency16,myTiles.tile1,myTiles.tile2,myTiles.tile5], TileScale.Sixteen)))
         sprite.right = 220
     }
@@ -160,7 +159,6 @@ scene.onOverlapTile(SpriteKind.Player, myTiles.tile6, function (sprite, location
 controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
     unlockBlueDoor()
 })
-// Funky behavior - must be touching D1, walls at D1 and D3 disappear at same time
 function unlockBlueDoor () {
     if (mySprite.tileKindAt(TileDirection.Bottom, myTiles.tile5)) {
         tiles.setWallAt(tiles.getTileLocation(7, 15), false)
@@ -252,3 +250,4 @@ tiles.loadMap(tiles.createMap(tiles.createTilemap(hex`10001000010101010101010101
     2 . . . . . . . . . . . . . . 2 
     2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
     `, [myTiles.transparency16,myTiles.tile1,myTiles.tile2,myTiles.tile5], TileScale.Sixteen)))
+game.showLongText("Quarantine is finally over! It's time to go outside. ", DialogLayout.Bottom)
